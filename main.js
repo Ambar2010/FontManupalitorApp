@@ -1,3 +1,9 @@
+noseX =0;
+noseY = 0;
+difference = 0;
+leftWristX=0;
+rightWristX=0;
+
 function setup() {
     video = createCapture(VIDEO);
     video.size(550,500);
@@ -7,14 +13,28 @@ function setup() {
     poseNet = ml5.poseNet(video, modelLoaded);
     poseNet.on('pose',gotPoses);
 }
-function draw() {
-    background('#ff3f05');
-}
 function modelLoaded() {
     console.log("Model Is Initialized");
 }
 function gotPoses(results) {
     if(results.length > 0) {
         console.log(results);
+        noseX = results[0].pose.nose.x;
+        noseY = results[0].pose.nose.y;
+        console.log("nose X = " + noseX + "nose Y = " +noseY);
+
+        leftWristX = results[0].pose.leftWrist.x;
+        rightWristX = results[0].pose.rightWrist.x;
+        difference = Math.floor(leftWristX - rightWristX);
+        console.log("left Wrist X = " + leftWristX + "right Wrist X = " +rightWristX + "difference = " + difference);
+
    }
+}
+function draw() {
+    document.getElementById("square_side").innerHTML = "Width And Height Of The Is = " +difference+"px";
+    background('#ff3f05');
+    textSize(difference);
+    fill('black');
+    
+    text('Peter', 50, 400);
 }
